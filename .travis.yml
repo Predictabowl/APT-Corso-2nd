@@ -1,6 +1,6 @@
 language: java
 
-jdk: openjdk13
+jdk: openjdk8
 #matrix:
 #   include:
 #      - jdk: openjdk8
