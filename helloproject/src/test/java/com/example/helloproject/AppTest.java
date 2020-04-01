@@ -18,5 +18,10 @@ public class AppTest {
 	public void test_say_hello() {
 		assertEquals("Hello", app.sayHello());
 	}
+	
+	@Test
+	public void test_say_hello_with_name() {
+		assertEquals("Hello Mario", app.sayHello("Mario"));
+	}
 
 }
