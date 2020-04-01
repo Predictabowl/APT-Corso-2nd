@@ -1,8 +1,9 @@
 language: java
 
-matrix:
-   include:
-      - jdk: openjdk9
+jdk: openjdk13
+#matrix:
+#   include:
+#      - jdk: openjdk8
 #      - jdk: openjdk9
 #      - os: osx
 #        osx_image: xcode 10.1
