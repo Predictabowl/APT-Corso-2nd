@@ -5,7 +5,7 @@ public class App {
 		if(name == null)
 			return "Hello";
 		else
-			return "Hello" + name;
+			return "Hello " + name;
 	}
 	
 	public String sayHello() {

@@ -1,6 +1,13 @@
 language: java
 
-jdk: openjdk8
+matrix:
+   include:
+      - jdk: openjdk8
+         env: MAVEN_ARGS="-Pjacoco coveralls:report"
+      - jdk: openjdk9
+      - os: osx
+        osx_image: xcode 10.1
+        if: type IN (pull_request)
 
 #skip installation step
 install: true
@@ -10,4 +17,4 @@ cache:
       - $HOME/.m2
 
 script:
-   - mvn -f helloproject/pom.xml clean verify -Pjacoco coveralls:report
+   - mvn -f helloproject/pom.xml clean verify $MAVEN_ARGS
