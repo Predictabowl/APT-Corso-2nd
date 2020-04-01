@@ -1,11 +1,6 @@
 language: java
 
-matrix:
-   include:
-      - jdk: openjdk8
-      - jdk: openjdk9
-      - os: osx
-        osx_image: xcode 10.1
+jdk: openjdk8
 
 #skip installation step
 install: true
