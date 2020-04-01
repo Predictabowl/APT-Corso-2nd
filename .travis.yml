@@ -3,6 +3,7 @@ language: java
 matrix:
    include:
       - jdk: openjdk8
+         env: MAVEN_ARGS="-Pjacoco coveralls:report"
       - jdk: openjdk9
         if: type IN (pull_request)
       - os: osx
@@ -17,4 +18,4 @@ cache:
       - $HOME/.m2
 
 script:
-   - mvn -f helloproject/pom.xml clean verify -Pjacoco coveralls:report
+   - mvn -f helloproject/pom.xml clean verify $MAVEN_ARGS
