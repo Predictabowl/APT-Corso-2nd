@@ -1,6 +1,7 @@
 package com.example.helloproject;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,12 +16,12 @@ public class AppTest {
 
 	@Test
 	public void test_say_hello() {
-		assertThat(app.sayHello()).isEqualTo("Hello");
+		assertEquals("Hello", app.sayHello());
 	}
 	
 	@Test
 	public void test_say_hello_with_name() {
-		assertThat(app.sayHello("Mario")).isEqualTo("Hello Mario");
+		assertEquals("Hello Mario", app.sayHello("Mario"));
 	}
 
 }
