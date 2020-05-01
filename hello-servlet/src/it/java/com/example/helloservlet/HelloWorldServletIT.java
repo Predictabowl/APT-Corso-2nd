@@ -3,11 +3,24 @@ package com.example.helloservlet;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
+import java.util.logging.Logger;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import io.restassured.RestAssured;
 
 public class HelloWorldServletIT {
 
 	private static final String BASE_URL = "/hello-servlet/HelloWorldServlet";
+	
+	@BeforeClass
+	public static void setUp() {
+		int tomcatPort = Integer.parseInt(System.getProperty("tomcat.http.port","8080"));
+		RestAssured.port = tomcatPort;
+		Logger.getLogger(HelloWorldServletIT.class.toString())
+			.info("Using Url: "+RestAssured.baseURI+":"+RestAssured.port);
+	}
 
 	@Test
 	public void testGet() {
