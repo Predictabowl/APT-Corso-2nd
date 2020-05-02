@@ -2,12 +2,14 @@ package com.example.helloservlet;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
+import com.example.helloservlet.services.HelloNameService;
+
 
 /**
  * Servlet implementation class HelloWorldServlet
@@ -15,14 +17,16 @@ import org.apache.commons.lang3.StringUtils;
 public class HelloWorldServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	@Inject
+	private HelloNameService helloNameService;
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public HelloWorldServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -35,9 +39,7 @@ public class HelloWorldServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String name = req.getParameter("name");
-		if (StringUtils.isEmpty(name))
-			name = "World";
+		String name = helloNameService.processName(req.getParameter("name"));
 		req.setAttribute("user", name);
 		req.getRequestDispatcher("response.jsp").forward(req, resp);
 	}

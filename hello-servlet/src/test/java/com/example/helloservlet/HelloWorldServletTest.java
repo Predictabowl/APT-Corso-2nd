@@ -15,10 +15,13 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import com.example.helloservlet.services.HelloNameService;
+
 /*
- * This test class is onty demonstrative.
+ * This test class is only demonstrative.
  * We should not mock types we don't own, like HttpServletResponse
  */
 
@@ -30,15 +33,18 @@ public class HelloWorldServletTest {
 	@Mock
 	private HttpServletRequest request;
 
-	private HelloWorldServlet helloWorldServlet;
-
 	@Mock
 	private RequestDispatcher requestDispatcher;
+	
+	@Mock
+	private HelloNameService helloNameService;
+	
+	@InjectMocks
+	private HelloWorldServlet helloWorldServlet;
 
 	@Before
 	public void setUp() throws Exception {
 		initMocks(this);
-		helloWorldServlet = new HelloWorldServlet();
 	}
 
 	@Test
@@ -46,13 +52,16 @@ public class HelloWorldServletTest {
 		StringWriter stringWriter = new StringWriter();
 		when(response.getWriter()).thenReturn(new PrintWriter(stringWriter));
 		when(request.getContextPath()).thenReturn("/");
+		
 		helloWorldServlet.doGet(request, response);
+		
 		assertThat(stringWriter.toString()).isEqualTo("Served at: /");
 	}
 
 	@Test
 	public void doPost_without_name() throws Exception {
 		when(request.getRequestDispatcher("response.jsp")).thenReturn(requestDispatcher);
+		when(helloNameService.processName(null)).thenReturn("World");
 
 		helloWorldServlet.doPost(request, response);
 
@@ -63,8 +72,9 @@ public class HelloWorldServletTest {
 
 	@Test
 	public void doPost_with_name() throws Exception{
-		when(request.getParameter("name")).thenReturn("Mario");
+		when(request.getParameter("name")).thenReturn("A Name");
 		when(request.getRequestDispatcher("response.jsp")).thenReturn(requestDispatcher);
+		when(helloNameService.processName(anyString())).thenReturn("Mario");
 		
 		helloWorldServlet.doPost(request, response);
 		

@@ -18,6 +18,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<tomcat.docker.version>tomcat:9.0.34-jdk8-corretto</tomcat.docker.version>
 	</properties>
 
 	<dependencies>
@@ -55,6 +56,30 @@
 			<artifactId>rest-assured</artifactId>
 			<version>3.3.0</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.141.59</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<!-- required to see webdrivermanager logs -->
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.weld.servlet</groupId>
+			<artifactId>weld-servlet-shaded</artifactId>
+			<version>3.1.4.Final</version>
 		</dependency>
 	</dependencies>
 
@@ -110,6 +135,7 @@
 						<configuration>
 							<sources>
 								<source>src/it/java</source>
+								<source>src/e2e/java</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -118,14 +144,29 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<!-- <version>3.0.0-M1</version> -->
-				<version>2.22.1</version>
+				<version>3.0.0-M1</version>
 				<executions>
 					<execution>
+						<id>default-it</id>
 						<goals>
 							<goal>integration-test</goal>
 							<goal>verify</goal>
 						</goals>
+					</execution>
+					<execution>
+						<id>e2e-tests</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>**/*E2E.java</include>
+							</includes>
+							<excludes>
+								<exclude>**/*IT.java</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 				</executions>
 				<configuration>
@@ -142,8 +183,9 @@
 					<showLogs>true</showLogs>
 					<images>
 						<image>
-							<name>tomcat:9.0.19-jre8</name>
+							<name>${tomcat.docker.version}</name>
 							<!-- <name>tomcat:9.0.34-jdk8</name> -->
+							<!-- <name>tomcat:9.0.19-jre8</name> -->
 							<run>
 								<ports>
 									<port>${tomcat.port.number}:8080</port>
@@ -152,7 +194,7 @@
 									<http>
 										<url>http://localhost:${tomcat.port.number}</url>
 										<method>GET</method>
-										<status>200</status> <!-- 200 is ok -->
+										<status>404</status>
 									</http>
 									<time>10000</time>
 								</wait>
